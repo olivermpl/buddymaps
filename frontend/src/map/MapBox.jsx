@@ -12,7 +12,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './style/map.css';
 import { useQuery } from '@tanstack/react-query';
 import { get } from '../globalFunctions/api';
-import { LayersControl } from 'react-leaflet';
+import useRoute from '../route/useRoute';
 
 const lineStyle = {
   id: 'roadLayer',
@@ -35,40 +35,20 @@ function MapBox() {
     zoom: 8,
     style: { width: '50vw', height: '50vh' },
   });
-  const [coords, setCoords] = useState([]);
 
-  const geojson = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'feature',
-        geometry: {
-          type: 'LineString',
-          coordinates: [...coords],
-        },
-      },
-    ],
-  };
+  const coords = [
+    [153.412281, -28.013914],
+    [153.04363, -27.47324],
+  ];
 
-  const url =
-    'https://api.mapbox.com/directions/v5/mapbox/driving/153.412281%2C-28.013914%3B153.04363%2C-27.47324?geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1Ijoib2xpdmVybW9zY2hlciIsImEiOiJjbHNsNms1MmYwOTd2MnFuOG83Mmh3N3k0In0.Hz_vjFeQ9nKuVCYMb7TQ_Q';
-  const { status, error, data } = useQuery({
-    queryKey: ['route'],
-    queryFn: () => get(url),
-  });
-  const getRoute = async () => {
-    // const { status, error, data } = await useQuery({
-    //   queryKey: ['route'],
-    //   queryFn: get(url),
-    // });
-  };
+  const { sourceElementData, layerElementData, status } = useRoute(coords);
 
   useEffect(() => {
-    if (data) {
-      console.log(data.routes[0].geometry.coordinates);
-      setCoords(data.routes[0].geometry.coordinates);
+    if (status === 'success') {
+      console.log(sourceElementData);
+      console.log(layerElementData);
     }
-  }, [data]);
+  }, [status]);
 
   return (
     <div className="map-container">
@@ -78,8 +58,8 @@ function MapBox() {
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
       >
-        <Source id="routeSource" type="geojson" data={geojson}>
-          <Layer {...lineStyle} />
+        <Source {...sourceElementData}>
+          <Layer {...layerElementData} />
         </Source>
       </Map>
     </div>
