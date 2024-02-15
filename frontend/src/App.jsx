@@ -1,11 +1,7 @@
 import './App.css';
-import Map from './map/Map';
+import MapBox from './map/MapBox';
 function App() {
-  return (
-    <div className="map-container">
-      <Map />
-    </div>
-  );
+  return <MapBox />;
 }
 
 export default App;
