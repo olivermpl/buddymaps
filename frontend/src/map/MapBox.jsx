@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Map from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import './style/map.css';
-import Route from '../route/Route';
+import RouteComponent from '../route/RouteComponent';
 import LocationPicker from '../route/locationPicker/LocationPicker';
+import { RouteContext } from '../route/RouteContext';
 
 function MapBox() {
   //MAP settings
@@ -16,12 +17,7 @@ function MapBox() {
   });
 
   const mapRef = useRef(null);
-
-  const coords = [
-    [153.412281, -28.013914],
-    [153.04363, -27.47324],
-    [152.665497, -26.190001],
-  ];
+  const { routes, dispatch: ctxDispatch } = useContext(RouteContext);
 
   return (
     <div className="map-container">
@@ -32,8 +28,9 @@ function MapBox() {
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
         ref={mapRef}
       >
-        {' '}
-        <Route id="45455ABF" coordinates={coords} />
+        {routes.map((r) => (
+          <RouteComponent key={r._id} {...r} />
+        ))}
       </Map>
       <LocationPicker map={mapRef.current} />
     </div>

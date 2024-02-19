@@ -7,39 +7,39 @@ const USEROUTEDISPATCHTYPES = {
   addRoutePoint: 'addRoutePoint',
 };
 
-function useRoute(coords, id) {
+function useRoute(props) {
   const dispatch = (type, payload) => {
     switch (type) {
       default:
         break;
     }
   };
-  const [coordinates] = useState(coords);
-  const [url, setUrl] = useState(URLBuilder.getDirectionsApiUrl(coords));
+  const [coordinates] = useState(props.coords);
+  const [url, setUrl] = useState(URLBuilder.getDirectionsApiUrl(props.coords));
 
   //return States
   const [sourceElementData, setSourceElementData] = useState({
-    id: 'routeSource' + id,
+    id: 'routeSource' + props.id,
     type: 'geojson',
     data: {},
   });
 
   const [layerElementData] = useState({
-    id: 'roadLayer' + id,
+    id: 'roadLayer' + props.id,
     type: 'line',
     layout: {
       'line.join': 'round',
       'line-cap': 'round',
     },
     paint: {
-      'line-color': 'blue',
+      'line-color': props.color,
       'line-width': 4,
       'line-opacity': 0.75,
     },
   });
 
   const { status, error, data } = useQuery({
-    queryKey: ['route', id],
+    queryKey: ['route', props.id],
     queryFn: () => get(url),
     enabled: !!url,
   });

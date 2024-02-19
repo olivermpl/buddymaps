@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Layer, Marker, Source } from 'react-map-gl';
 import useRoute from './hooks/useRoute';
 
-function Route({ id, coordinates }) {
-  const { route } = useRoute(coordinates, id);
+const REDUCERTYPES = {};
+
+function reducer(state, { type, payload }) {
+  switch (type) {
+    default:
+      break;
+  }
+}
+function RouteComponent(props) {
+  const { route } = useRoute({
+    coords: props.getCoordinates(),
+    id: props._id,
+    color: props.color,
+  });
+
   return (
     <>
       <Source {...route.sourceElementData}>
         <Layer {...route.layerElementData} />
       </Source>{' '}
-      {coordinates.map((coord) => {
+      *{' '}
+      {props.getCoordinates().map((coord) => {
         return (
           <Marker
             latitude={coord[1]}
@@ -24,4 +38,4 @@ function Route({ id, coordinates }) {
   );
 }
 
-export default Route;
+export default RouteComponent;
