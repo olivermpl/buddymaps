@@ -3,8 +3,19 @@ import { get } from '../../globalFunctions/api';
 import { URLBuilder } from '../../globalFunctions/urlBuilder';
 import { useQuery } from '@tanstack/react-query';
 
-function useRoute(coordinates, id) {
-  const url = URLBuilder.getDirectionsApiUrl(coordinates);
+const USEROUTEDISPATCHTYPES = {
+  addRoutePoint: 'addRoutePoint',
+};
+
+function useRoute(coords, id) {
+  const dispatch = (type, payload) => {
+    switch (type) {
+      default:
+        break;
+    }
+  };
+  const [coordinates] = useState(coords);
+  const [url, setUrl] = useState(URLBuilder.getDirectionsApiUrl(coords));
 
   //return States
   const [sourceElementData, setSourceElementData] = useState({
@@ -37,7 +48,6 @@ function useRoute(coordinates, id) {
     if (!data) {
       return;
     }
-    console.log(url);
     const geojson = {
       type: 'FeatureCollection',
       features: [
@@ -53,6 +63,10 @@ function useRoute(coordinates, id) {
     setSourceElementData({ ...sourceElementData, data: geojson });
   }, [data]);
 
+  useEffect(() => {
+    setUrl(URLBuilder.getDirectionsApiUrl(coordinates));
+  }, [coordinates]);
+
   return {
     route: {
       sourceElementData: sourceElementData,
@@ -60,6 +74,7 @@ function useRoute(coordinates, id) {
     },
     error: error,
     status: status,
+    dispatch: dispatch,
   };
 }
 

@@ -1,7 +1,11 @@
 import './App.css';
 import MapBox from './map/MapBox';
 function App() {
-  return <MapBox />;
+  return (
+    <div>
+      <MapBox />
+    </div>
+  );
 }
 
 export default App;
