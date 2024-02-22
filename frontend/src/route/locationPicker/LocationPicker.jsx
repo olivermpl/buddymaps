@@ -2,17 +2,25 @@ import React, { useContext, useState } from 'react';
 import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
 import mapboxgl from 'mapbox-gl';
 import { ROUTECONTEXTTYPES, RouteContext } from '../RouteContext';
+import RouteDetailView from '../RouteDetailView';
 
 function LocationPicker(props) {
   const [value, setValue] = useState('');
-  const { dispatch: ctxDispatch } = useContext(RouteContext);
+  const { selectedRoute, dispatch: ctxDispatch } = useContext(RouteContext);
 
   const onRetrieve = (e) => {
     const coords = e.features[0].geometry.coordinates;
     ctxDispatch({
       type: ROUTECONTEXTTYPES.addPointToRoute,
-      payload: { _id: 1, coordinates: coords },
+      payload: {
+        _id: 1,
+        data: {
+          coordinates: coords,
+          name: e.features[0].properties.name,
+        },
+      },
     });
+    setValue('');
   };
   function onSubmit(e) {
     e.preventDefault();
@@ -31,14 +39,15 @@ function LocationPicker(props) {
           onRetrieve={onRetrieve}
           map={props.map}
           marker={true}
-          mapboxgl={props.map}
           value={value}
           onChange={(v) => {
             setValue(v);
-            console.log('change ', v);
           }}
         />
       </form>
+      {selectedRoute._id && (
+        <RouteDetailView {...selectedRoute}></RouteDetailView>
+      )}
     </div>
   );
 }

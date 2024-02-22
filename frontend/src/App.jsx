@@ -1,10 +1,15 @@
 import './App.css';
 import MapBox from './map/MapBox';
+import SideBar from './nav/SideBar';
 function App() {
   return (
-    <div>
-      <MapBox />
-    </div>
+    <>
+      {' '}
+      <main>
+        <MapBox />
+      </main>
+      <SideBar> </SideBar>
+    </>
   );
 }
 

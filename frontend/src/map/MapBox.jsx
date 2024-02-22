@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import Map from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import './style/map.css';
 import RouteComponent from '../route/RouteComponent';
-import LocationPicker from '../route/locationPicker/LocationPicker';
 import { RouteContext } from '../route/RouteContext';
 
 function MapBox() {
@@ -32,7 +31,7 @@ function MapBox() {
           <RouteComponent key={r._id} {...r} />
         ))}
       </Map>
-      <LocationPicker map={mapRef.current} />
+      {/* <LocationPicker map={mapRef.current} /> */}
     </div>
   );
 }
